@@ -1,0 +1,15 @@
+{
+    "name": "discord-token-joiner",
+    "version": "1.0.0",
+    "description": "a simple script to mass join discord tokens into a server.",
+    "main": "index.js",
+    "author": "@uutu, @iamthonk",
+    
+    "dependencies": {
+      "2captcha": "^3.0.7",
+      "node-capmonster": "^0.4.2",
+      "chalk": "^4.1.2",
+      "discord.js-selfbot-v13": "^2.14.6",
+      "gradient-string": "^2.0.2"
+    }
+  }
