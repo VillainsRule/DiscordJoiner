@@ -13,7 +13,7 @@ let joined = 0;
 let failed = 0;
 
 console.log(gradient.rainbow('Discord Token Joiner (+ booster)!'));
-console.log(gradient.rainbow('   > Built by @uutu & updated by @iamthonk\n'));
+console.log(gradient.rainbow('   > Built by @uutu & updated by @xthonk\n'));
 
 async function join(token, tokens) {
   let client = config.captcha_api_key ? new selfbot.Client({
