@@ -3,7 +3,7 @@
     "version": "1.0.0",
     "description": "a simple script to mass join discord tokens into a server.",
     "main": "index.js",
-    "author": "@uutu, @iamthonk",
+    "author": "@uutu, @xthonk",
     
     "dependencies": {
       "2captcha": "^3.0.7",
