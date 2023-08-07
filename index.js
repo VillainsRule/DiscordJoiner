@@ -2,9 +2,11 @@ const chalk = require('chalk');
 const gradient = require('gradient-string');
 const selfbot = require('discord.js-selfbot-v13');
 const fs = require('fs');
+const proxyAgent = require('https-proxy-agent');
 
 const config = require('./config.js');
 const tokens = fs.readFileSync('tokens.txt', 'utf-8').toString().split('\n');
+const proxies = fs.readFileSync('proxies.txt', 'utf-8').toString().split('\n');
 
 process.on('unhandledRejection', (reason, promise) => console.log(`${chalk.redBright('[ERROR]')} Unhandled rejection at ${promise}, reason: ${reason}`));
 process.on('uncaughtException', (err, origin) => console.log(`${chalk.redBright('[ERROR]')} Uncaught exception: ${err} at ${origin}}`));
@@ -12,11 +14,25 @@ process.on('uncaughtException', (err, origin) => console.log(`${chalk.redBright(
 let joined = 0;
 let failed = 0;
 
+let modifiedCode = (config.invite.includes('/')) ? config.invite.match(/\/([^/]+)$/)?.[1] : config.invite;
+
 console.log(gradient.rainbow('Discord Token Joiner (+ booster)!'));
 console.log(gradient.rainbow('   > Built by @uutu & updated by @xthonk\n'));
 
 async function join(token, tokens) {
-  let client = config.captcha_api_key ? new selfbot.Client({
+  let client;
+
+  let proxy = proxies[Math.floor(Math.random() * proxies.length)]?.replaceAll('\r', '')?.replaceAll('\n', '');
+
+  if (config.useProxies) client = config.captcha_api_key ? new selfbot.Client({
+    captchaService: config.captcha_service.toLowerCase(),
+    captchaKey: config.captcha_api_key,
+    http: { agent: proxyAgent(proxy) },
+    captchaWithProxy: true,
+    proxy,
+    checkUpdate: false
+  }) : new selfbot.Client({ checkUpdate: false });
+  else client = config.captcha_api_key ? new selfbot.Client({
     captchaService: config.captcha_service.toLowerCase(),
     captchaKey: config.captcha_api_key,
     checkUpdate: false
@@ -25,7 +41,7 @@ async function join(token, tokens) {
   client.on('ready', async () => {
     console.log(chalk.green('Logged in as @') + gradient.cristal(client.user.username));
 
-    await client.fetchInvite(config.inviteCode).then(async (invite) => {
+    await client.fetchInvite(modifiedCode).then(async (invite) => {
       await invite.acceptInvite(true).then(async () => {
         console.log(chalk.greenBright(`${chalk.greenBright('[SUCCESS]')} Joined as @${gradient.passion(client.user.username)}`));
         joined++;
