@@ -27,7 +27,7 @@ async function join(token, tokens) {
   if (config.useProxies) client = config.captcha_api_key ? new selfbot.Client({
     captchaService: config.captcha_service.toLowerCase(),
     captchaKey: config.captcha_api_key,
-    http: { agent: proxyAgent(proxy) },
+    http: { agent: new proxyAgent.HttpsProxyAgent(proxy) },
     captchaWithProxy: true,
     proxy,
     checkUpdate: false
