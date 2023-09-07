@@ -20,23 +20,19 @@ console.log(gradient.rainbow('Discord Token Joiner (+ booster)!'));
 console.log(gradient.rainbow('   > Built by @uutu & updated by @xthonk\n'));
 
 async function join(token, tokens) {
-  let client;
-
   let proxy = proxies[Math.floor(Math.random() * proxies.length)]?.replaceAll('\r', '')?.replaceAll('\n', '');
+  let http = { agent: new proxyAgent.HttpsProxyAgent(proxy) };
+  let captchaService = config.captchaSolver.service.toLowerCase();
+  let captchaKey = config.captchaSolver.apiKey;
 
-  if (config.useProxies) client = config.captcha_api_key ? new selfbot.Client({
-    captchaService: config.captcha_service.toLowerCase(),
-    captchaKey: config.captcha_api_key,
-    http: { agent: new proxyAgent.HttpsProxyAgent(proxy) },
-    captchaWithProxy: true,
-    proxy,
+  let client = new selfbot.Client({
+    captchaService: (config.captchaSolver.enabled) ? captchaService : undefined,
+    captchaKey: (config.captchaSolver.enabled) ? captchaKey : undefined,
+    http: (config.useProxies) ? http : undefined,
+    captchaWithProxy: config.useProxies && config.captchaSolver,
+    proxy: (config.useProxies) ? proxy : undefined,
     checkUpdate: false
-  }) : new selfbot.Client({ checkUpdate: false });
-  else client = config.captcha_api_key ? new selfbot.Client({
-    captchaService: config.captcha_service.toLowerCase(),
-    captchaKey: config.captcha_api_key,
-    checkUpdate: false
-  }) : new selfbot.Client({ checkUpdate: false });
+  });
 
   client.on('ready', async () => {
     console.log(chalk.green('Logged in as @') + gradient.cristal(client.user.username));
