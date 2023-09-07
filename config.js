@@ -1,7 +1,10 @@
 module.exports = {
-    captcha_service: '', // specify one. can be "2captcha" or "capmonster"
-    captcha_api_key: '', // the API key for captcha access
-    
+    captchaSolver: {
+        enabled: false, // if captcha solving is enabled
+        service: '', // specify one. can be "2captcha" or "capmonster"
+        apiKey: '' // the API key for captcha access
+    },
+
     invite: '', // the server invite code, example is 'HGfFFUQ7F7', can be vanity
 
     useProxies: false, // if to use proxies from proxies.txt to join
